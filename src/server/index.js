@@ -1,5 +1,5 @@
 require('dotenv').config()
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
 app.use(express.json())
@@ -7,27 +7,26 @@ const cors = require('cors')
 app.use(cors())
 const path = require('path')
 
-const url = process.env.MONGODB_URI
+const { Score: WordleTemplateScore } = require('./variant_indexes/wordletemplate.js')
+const { Score: BigramleScore } = require('./variant_indexes/bigramle.js')
 
-mongoose.connect(url)
-const scoreSchema = new mongoose.Schema({
-    solutionIndex: Number,
-    solution: String,
-    guesses: [String],
-    lost: Boolean,
-    isHardMode: Boolean,
-    emojiGrid: String
+
+app.post('/wordletemplate/api/scores', (req, res) => {
+  const score = new WordleTemplateScore(req.body)
+
+  score.save().then(savedScore => {
+      res.json(savedScore)
+  })
 })
 
-const Score = mongoose.model('Score', scoreSchema)
-
-app.post('/api/scores', (req, res) => {
-    const score = new Score(req.body)
+app.post('/bigramle/api/scores', (req, res) => {
+    const score = new BigramleScore(req.body)
 
     score.save().then(savedScore => {
         res.json(savedScore)
     })
 })
+
 
 const PORT = process.env.PORT || 3001
 
