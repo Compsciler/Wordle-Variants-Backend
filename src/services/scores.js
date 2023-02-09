@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/wordletemplate/api/scores'
+const baseUrl = 'http://wordlebackend.netlify.app/wordletemplate/api/scores'
 
 /*
 const getAll = () => {
